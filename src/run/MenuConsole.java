@@ -1,5 +1,6 @@
 package run;
 
+import exception.InvalidOrderIdException;
 import model.*;
 import repository.MenuRepository;
 import service.MenuManagement;
@@ -301,8 +302,12 @@ public class MenuConsole {
 
         System.out.print("Nhập số lượng: ");
         int quantity = Integer.parseInt(sc.nextLine());
+        try{
+            orderManagement.addItem(orderId, itemId, quantity);
+        }catch(InvalidOrderIdException e){
+            System.out.println(e.getMessage());
+        }
 
-        orderManagement.addItem(orderId, itemId, quantity);
     }
 
     //Cập nhật trạng thái đơn hàng
@@ -319,12 +324,17 @@ public class MenuConsole {
             System.out.println("0. Thoát");
             System.out.print("Lựa chọn của bạn: ");
             choice = Integer.parseInt(sc.nextLine());
-            switch (choice) {
-                case 1 -> orderManagement.updateStatus(orderId, OrderStatus.PENDING);
-                case 2 -> orderManagement.updateStatus(orderId, OrderStatus.PAID);
-                case 3 -> orderManagement.updateStatus(orderId, OrderStatus.CANCELLED);
-                default -> System.out.println("Lựa chọn không phù hợp!");
+            try{
+                switch (choice) {
+                    case 1 -> orderManagement.updateStatus(orderId, OrderStatus.PENDING);
+                    case 2 -> orderManagement.updateStatus(orderId, OrderStatus.PAID);
+                    case 3 -> orderManagement.updateStatus(orderId, OrderStatus.CANCELLED);
+                    default -> System.out.println("Lựa chọn không phù hợp!");
+                }
+            }catch(InvalidOrderIdException e){
+                System.out.println(e.getMessage());
             }
+
         } while (choice != 0);
 
     }
@@ -333,7 +343,12 @@ public class MenuConsole {
     public static void searchOrder(Scanner sc) {
         System.out.print("Nhập ID đơn hàng: ");
         String orderId = sc.nextLine();
-        orderManagement.displayOrder(orderId);
+        try{
+            orderManagement.displayOrder(orderId);
+        }catch(InvalidOrderIdException e){
+            System.out.println(e.getMessage());
+        }
+
     }
 
     // Doanh thu theo tháng

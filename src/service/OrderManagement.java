@@ -45,6 +45,10 @@ public class OrderManagement implements IOrderService{
 
     @Override
     public void addItem(String orderId, String itemId, int quantity) throws InvalidOrderIdException {
+        if(quantity <= 0){
+            System.out.println("Số lượng không phù hợp!");
+            return;
+        }
         Optional<Order> order = OrderRepository.findOrderById(orderId);
 
         if (order.isPresent()) {

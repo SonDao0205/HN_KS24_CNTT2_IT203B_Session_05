@@ -18,10 +18,6 @@ public class StatisticService implements IStatisticService {
             System.out.println("Tháng không phù hợp!");
             return -1;
         }
-        System.out.println("sum : "+OrderRepository.orders.stream().filter(order -> order.getCreatedAt().getMonthValue() == month && order.getStatus() == OrderStatus.PAID)
-                .mapToDouble(Order::getTotalPrice)
-                .sum());
-
         return OrderRepository.orders.stream().filter(order -> order.getCreatedAt().getMonthValue() == month && order.getStatus() == OrderStatus.PAID)
                 .mapToDouble(Order::getTotalPrice)
                 .sum();
@@ -36,7 +32,7 @@ public class StatisticService implements IStatisticService {
             });
         });
         return result.entrySet().stream()
-                .sorted((a, b) -> b.getValue().compareTo(a.getValue()))
+                .sorted((a, b) -> b.getValue().compareTo(a.getValue())).limit(3)
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
                         Map.Entry::getValue,
